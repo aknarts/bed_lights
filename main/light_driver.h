@@ -17,6 +17,7 @@
 
 #include <stdbool.h>
 #include <math.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -119,6 +120,42 @@ void light_driver_set_color_xy(uint16_t color_current_x, uint16_t color_current_
 * @param  sat  The sat to be set
 */
 void light_driver_set_color_hue_sat(uint8_t hue, uint8_t sat);
+
+/**
+* @brief Set light color temperature
+*
+* @param  mired  The color temperature in mireds to be set
+*/
+void light_driver_set_color_temperature_mired(uint16_t mired);
+
+typedef enum {
+    LIGHT_EFFECT_NONE = 0,
+    LIGHT_EFFECT_STATIC,
+    LIGHT_EFFECT_BLINK,
+    LIGHT_EFFECT_BREATHE,
+    LIGHT_EFFECT_ICU,
+    LIGHT_EFFECT_RANDOM_COLOR
+} light_effect_t;
+
+void light_driver_effect_start(light_effect_t effect);
+void light_driver_effect_stop(void);
+
+typedef struct {
+    int gpio;
+    uint16_t led_count; // number of pixels on this channel
+} light_channel_config_t;
+
+void light_driver_init_channels(const light_channel_config_t *channels, size_t count, bool power_default);
+size_t light_driver_channel_count(void);
+
+void light_driver_set_power_ch(size_t ch, bool power);
+void light_driver_set_level_ch(size_t ch, uint8_t level);
+void light_driver_set_color_RGB_ch(size_t ch, uint8_t red, uint8_t green, uint8_t blue);
+void light_driver_set_color_xy_ch(size_t ch, uint16_t color_current_x, uint16_t color_current_y);
+void light_driver_set_color_hue_sat_ch(size_t ch, uint8_t hue, uint8_t sat);
+void light_driver_set_color_temperature_mired_ch(size_t ch, uint16_t mired);
+void light_driver_effect_start_ch(size_t ch, light_effect_t effect);
+void light_driver_effect_stop_ch(size_t ch);
 
 #ifdef __cplusplus
 } // extern "C"

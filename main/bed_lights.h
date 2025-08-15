@@ -20,6 +20,18 @@
 #define MANUFACTURER_NAME               "\x06""Acheta"
 #define MODEL_IDENTIFIER                "\x0C""Bed.Lights"
 
+#define BASE_LIGHT_ENDPOINT              1
+#define STAIRS_LED_COUNT                12   // number of individual stair lights (channels)
+#define BED_STRIP_COUNT                 2    // number of bed side strips (channels)
+#define BED_STRIP_LED_LENGTH            60    // assumed length per bed side strip (adjust)
+// NOTE: ESP32-C6 RMT channel count may limit how many strips can be driven simultaneously.
+#define TOTAL_LIGHT_CHANNELS            (STAIRS_LED_COUNT + BED_STRIP_COUNT)
+
+#define BOARD_TEMP_ENDPOINT             (BASE_LIGHT_ENDPOINT + TOTAL_LIGHT_CHANNELS)
+#define BOARD_TEMP_UPDATE_INTERVAL_S    5    // seconds between measurements
+#define BOARD_TEMP_MIN_C               -10
+#define BOARD_TEMP_MAX_C                85
+
 #define ESP_ZB_ZR_CONFIG()                                                              \
     {                                                                                   \
         .esp_zb_role = ESP_ZB_DEVICE_TYPE_ROUTER,                                       \
